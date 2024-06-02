@@ -12,14 +12,14 @@ Features
 
 Prerequisites
 
-    Python 3.x
-    ipaddress module (included in Python 3.3+)
+Python 3.x
+ipaddress module (included in Python 3.3+)
 
 Installation
 
-    Clone the repository:
+Clone the repository:
 
-    bash
+bash
 
     git clone <repository_url>
     cd <repository_directory>
@@ -29,7 +29,7 @@ Command Line Arguments
 
 bash
 
-usage: portscanner.py [-h] [-u URL] [-sn] [-o] [-sU [UDP_PORT]] [-p PORT] [-n NETWORK] [-p-]
+    usage: portscanner.py [-h] [-u URL] [-sn] [-o] [-sU [UDP_PORT]] [-p PORT] [-n NETWORK] [-p-]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -45,35 +45,35 @@ optional arguments:
 
 Examples
 
-    Scan a specific TCP port:
+Scan a specific TCP port:
 
-    bash
+bash
 
-sudo python3 portscanner.py -u example.com -p 80
+    sudo python3 portscanner.py -u example.com -p 80
 
 Scan all TCP ports:
 
 bash
 
-sudo python3 portscanner.py -u example.com -p-
+    sudo python3 portscanner.py -u example.com -p-
 
 Ping a target:
 
 bash
 
-sudo python3 portscanner.py -u example.com -sn
+    sudo python3 portscanner.py -u example.com -sn
 
 Scan a specific UDP port:
 
 bash
 
-sudo python3 portscanner.py -u example.com -sU 53
+    sudo python3 portscanner.py -u example.com -sU 53
 
 Check alive hosts in a network:
 
 bash
 
-sudo python3 portscanner.py -n 192.168.1.0/24
+    sudo python3 portscanner.py -n 192.168.1.0/24
 
 Show only open ports:
 
