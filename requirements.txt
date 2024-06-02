@@ -1,0 +1,6 @@
+# requirements.txt
+
+# No third-party packages required beyond the standard library
+
+# Recommended Python version
+# Python 3.7 or higher
