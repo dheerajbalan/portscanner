@@ -61,7 +61,7 @@ Check alive hosts in a network:
 
 bash
 
-    	python portscanner.py -n 192.168.1.0/24
+    python portscanner.py -n 192.168.1.0/24
 
 Optimization
 System Specs and Recommendations
