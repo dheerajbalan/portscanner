@@ -3,11 +3,11 @@ Port Scanner
 A versatile port scanning tool written in Python. This script allows you to scan ports on a specified target, check network hosts, and perform ping and UDP scans.
 Features
 
-    Port Scanning: Scan specific ports or all ports on a target.
-    Ping Scan: Check if a target is reachable.
-    UDP Scan: Scan UDP ports.
-    Network Host Check: Verify if hosts in a given network are alive.
-    Customizable Workers and Batch Size: Optimize scanning performance based on your system's specs.
+Port Scanning: Scan specific ports or all ports on a target.
+Ping Scan: Check if a target is reachable.
+UDP Scan: Scan UDP ports.
+Network Host Check: Verify if hosts in a given network are alive.
+Customizable Workers and Batch Size: Optimize scanning performance based on your system's specs.
 
 Installation
 
@@ -66,10 +66,10 @@ bash
 Optimization
 System Specs and Recommendations
 
-    4GB RAM: Workers 50-75, Batch Size 2000-5000
-    6GB RAM: Workers 75-100, Batch Size 5000-8000
-    8GB RAM: Workers 100-125, Batch Size 8000-12000
-    16GB RAM: Workers 125-200, Batch Size 12000-20000
+4GB RAM: Workers 50-75, Batch Size 2000-5000
+6GB RAM: Workers 75-100, Batch Size 5000-8000
+8GB RAM: Workers 100-125, Batch Size 8000-12000
+16GB RAM: Workers 125-200, Batch Size 12000-20000
 
 License
 
