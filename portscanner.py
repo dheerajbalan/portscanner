@@ -6,14 +6,24 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def get_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-u", "--url", dest="url", help="use url or ip of the domain to scan")
-    parser.add_argument("-sn", "--ping", action="store_true", help="pings the target")
-    parser.add_argument("-o", "--open", action="store_true", help="shows only open ports")
-    parser.add_argument("-sU", "--udp", dest="udp_port", type=int, nargs='?', const=None, help="use to scan the udp ports")
-    parser.add_argument("-p", "--port", type=int, dest="port", help="use any port number to scan")
-    parser.add_argument("-n", "--network", dest="network", help="checks the alive hosts in the network")
-    parser.add_argument("-p-", "--ports", action="store_true", help="to check all ports")
+    parser = argparse.ArgumentParser(
+        description=(
+            "NOTE: If you want to scan all ports, optimize according to your system specs:\n"
+            " - 4GB RAM: Workers (--workers): 50-75 threads, Batch Size (--batch-size): 2000-5000\n"
+            " - 6GB RAM: Workers (--workers): 75-100 threads, Batch Size (--batch-size): 5000-8000\n"
+            " - 8GB RAM: Workers (--workers): 100-125 threads, Batch Size (--batch-size): 8000-12000\n"
+            " - 16GB RAM: Workers (--workers): 125-200 threads, Batch Size (--batch-size): 12000-20000"
+        )
+    )
+    parser.add_argument("-u", "--url", dest="url", help="use URL or IP of the domain to scan")
+    parser.add_argument("-sn", "--ping", action="store_true", help="ping the target")
+    parser.add_argument("-o", "--open", action="store_true", help="show only open ports")
+    parser.add_argument("-sU", "--udp", dest="udp_port", type=int, nargs='?', const=None, help="scan UDP ports")
+    parser.add_argument("-p", "--port", type=int, dest="port", help="scan a specific port")
+    parser.add_argument("-n", "--network", dest="network", help="check alive hosts in the network")
+    parser.add_argument("-p-", "--ports", action="store_true", help="scan all ports")
+    parser.add_argument("-w", "--workers", type=int, default=150, help="number of concurrent workers")
+    parser.add_argument("-b", "--batch-size", type=int, default=10000, help="size of each batch for port scanning")
     return parser.parse_args()
 
 def get_url(url, port):
@@ -21,12 +31,46 @@ def get_url(url, port):
     scanner.settimeout(1)
     try:
         conn = scanner.connect_ex((url, port))
-        if conn == 0:
+        if conn == 0:  # If port is open
             return port, True
         else:
             return port, False
+    except Exception as e:
+        print(f"Error scanning port {port}: {e}")
+        return port, False
     finally:
         scanner.close()
+
+def all_ports(url, batch_size, max_workers):
+    total_ports = 65535
+    batches = [(start, min(start + batch_size - 1, total_ports)) for start in range(1, total_ports + 1, batch_size)]
+
+    for batch_num, (start_port, end_port) in enumerate(batches, 1):
+        print(f"\nScanning batch {batch_num}: Ports {start_port} - {end_port}")
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [executor.submit(get_url, url, port) for port in range(start_port, end_port + 1)]
+            try:
+                for future in as_completed(futures):
+                    port, is_open = future.result()
+                    if is_open:
+                        print(f"Port {port} is open")  # Print only if port is open
+            except KeyboardInterrupt:
+                print("\nScan interrupted. Cleaning up...")
+                executor.shutdown(wait=False)  # Attempt to stop the executor
+
+def scan_ports(url, start_port, end_port, max_workers):
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(get_url, url, port) for port in range(start_port, end_port)]
+        try:
+            for future in as_completed(futures):
+                port, is_open = future.result()
+                if is_open:
+                    print(f"Port {port} is open")
+        except KeyboardInterrupt:
+            print("\nScan interrupted. Cleaning up...")
+            executor.shutdown(wait=False)  # Attempt to stop the executor
+
 
 def ping_scan(url):
     output = subprocess.call(["ping", "-c 4", url])
@@ -36,14 +80,6 @@ def ping_scan(url):
         print("IP is not reachable")
     return output
 
-def all_ports(url):
-    with ThreadPoolExecutor(max_workers=80) as executor:
-        futures = [executor.submit(get_url, url, port) for port in range(1, 65536)]
-        for future in as_completed(futures):
-            port, is_open = future.result()
-            if is_open:
-                print(f"Port {port} is open")
-        
 def udp_scan(url, port):
     scan = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -61,13 +97,14 @@ def is_host_alive(ip_str, timeout=1):
     except Exception as e:
         return False
 
-def scan_ports(url, start_port, end_port):
-    with ThreadPoolExecutor(max_workers=70) as executor:
+def scan_ports(url, start_port, end_port, max_workers):
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [executor.submit(get_url, url, port) for port in range(start_port, end_port)]
         for future in as_completed(futures):
             port, is_open = future.result()
             if is_open:
                 print(f"Port {port} is open")
+            
 
 def main():
     try:
@@ -97,10 +134,10 @@ def main():
             return
 
         elif args.open:
-            scan_ports(args.url, 1, 65535)
+            scan_ports(args.url, 1, 1024, args.workers)
 
         elif args.ports:
-            all_ports(args.url)
+            all_ports(args.url, batch_size=args.batch_size, max_workers=args.workers)
 
         elif args.port is not None:
             port, is_open = get_url(args.url, args.port)
@@ -116,5 +153,6 @@ def main():
         print(f"Total time taken for all scans: {end_time - start_time} seconds")
     except KeyboardInterrupt:
         print("\n Exiting....")
+
 if __name__ == "__main__":
     main()
