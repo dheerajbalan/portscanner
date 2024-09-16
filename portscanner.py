@@ -9,10 +9,10 @@ def get_arguments():
     parser = argparse.ArgumentParser(
         description=(
             "NOTE: If you want to scan all ports, optimize according to your system specs:\n"
-            " - 4GB RAM: Workers (--workers): 50-75 threads, Batch Size (--batch-size): 2000-5000\n"
-            " - 6GB RAM: Workers (--workers): 75-100 threads, Batch Size (--batch-size): 5000-8000\n"
-            " - 8GB RAM: Workers (--workers): 100-125 threads, Batch Size (--batch-size): 8000-12000\n"
-            " - 16GB RAM: Workers (--workers): 125-200 threads, Batch Size (--batch-size): 12000-20000"
+            " - 4GB RAM: Workers (--workers): 4-8 threads, Batch Size (--batch-size): 200 - 500\n"
+            " - 6GB RAM: Workers (--workers): 8-16 threads, Batch Size (--batch-size): 500 - 1000 \n"
+            " - 8GB RAM: Workers (--workers): 16-32 threads, Batch Size (--batch-size): 1000 - 2000 \n"
+            " - 16GB RAM: Workers (--workers): 32-64 threads, Batch Size (--batch-size): 2000-4000"
         )
     )
     parser.add_argument("-u", "--url", dest="url", help="use URL or IP of the domain to scan")
