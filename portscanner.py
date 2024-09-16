@@ -8,11 +8,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 def get_arguments():
     parser = argparse.ArgumentParser(
         description=(
-            "NOTE: If you want to scan all ports, optimize according to your system specs:\n"
+            "NOTE: If you want to scan all ports, optimize according to your system specs(VM):\n"
             " - 4GB RAM: Workers (--workers): 4-8 threads, Batch Size (--batch-size): 200 - 500\n"
             " - 6GB RAM: Workers (--workers): 8-16 threads, Batch Size (--batch-size): 500 - 1000 \n"
             " - 8GB RAM: Workers (--workers): 16-32 threads, Batch Size (--batch-size): 1000 - 2000 \n"
-            " - 16GB RAM: Workers (--workers): 32-64 threads, Batch Size (--batch-size): 2000-4000"
+            " - 16GB RAM: Workers (--workers): 32-64 threads, Batch Size (--batch-size): 2000 - 4000"
         )
     )
     parser.add_argument("-u", "--url", dest="url", help="use URL or IP of the domain to scan")
