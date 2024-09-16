@@ -66,10 +66,10 @@ bash
 Optimization
 System Specs and Recommendations
 
-4GB RAM: Workers 50-75, Batch Size 2000-5000
-6GB RAM: Workers 75-100, Batch Size 5000-8000
-8GB RAM: Workers 100-125, Batch Size 8000-12000
-16GB RAM: Workers 125-200, Batch Size 12000-20000
+4GB RAM: Workers  4–8 , Batch Size 200 - 500
+6GB RAM: Workers  8-16, Batch Size 500 - 1000
+8GB RAM: Workers  16-32, Batch Size 1000 - 2000
+16GB RAM: Workers 32-64, Batch Size 2000 - 4000 
 
 License
 
