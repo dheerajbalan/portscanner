@@ -64,7 +64,7 @@ bash
     python portscanner.py -n 192.168.1.0/24
 
 Optimization
-System Specs and Recommendations
+System Specs and Recommendations(VM)
 
 4GB RAM: Workers  4–8 , Batch Size 200 - 500
 6GB RAM: Workers  8-16, Batch Size 500 - 1000
